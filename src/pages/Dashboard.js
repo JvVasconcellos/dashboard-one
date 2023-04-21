@@ -37,15 +37,19 @@ export default function Dashboard() {
     }
   };
 
-  const margin = { top: 100, right: 100, bottom: 100, left: 100 };
+  
 
-
+  
   return (
     <div>
       <Header title={props.identifier} />
       <div style={{width: '33%', height: '400px'}}>
         <ParentSize>
-          {({width, height}) =>  <LineChart datasets={props.datasets} width={width} height={height} margin={margin} config={props.config}/>}
+          {({width, height}) =>  
+                <LineChart datasets={props.datasets} width={width} height={height} config={props.config}/>
+
+            
+          }
         </ParentSize>
       </div>
     </div>

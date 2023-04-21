@@ -8,7 +8,7 @@ import { localPoint } from '@visx/event';
 import { Text } from '@visx/text';
 import { bisector } from 'd3-array';
 
-const Tooltip = ({ x, y, points }) => {
+const Tooltip = ({ x, y, points, config}) => {
     if (!x || !y || points.length === 0) return null;
     return (
       <g>
@@ -40,7 +40,8 @@ const Tooltip = ({ x, y, points }) => {
     );
   };
 
-const LinearChart = ({ datasets, width, height, margin, config}) => {
+const LinearChart = ({ datasets, width, height, config}) => {
+    const margin = { top: height / 5, right: width / 10, bottom: height / 5, left: width / 10 };
     const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
     const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
 
