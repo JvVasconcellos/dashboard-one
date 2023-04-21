@@ -6,7 +6,7 @@ export default function RoutesConfig(){
     return (
       <BrowserRouter>
           <Routes>
-              <Route exact path={"/" + process.env.REACT_APP_BASEURL} element={<Dashboard />} />
+              <Route exact path={"/"} element={<Dashboard />} />
           </Routes>
       </BrowserRouter>
     );
