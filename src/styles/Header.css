@@ -1,12 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
 .header {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    height: 60px;
-    background-color: #eee;
+    height: 65px;
+    background-color: #f7f7f7; 
   }
   
   .header__title {
-    margin: 0;
+    margin: 20px;
+    font-size: 25px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    color: #333;
   }
   

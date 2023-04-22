@@ -1,30 +1,55 @@
 .dashboard {
     min-height: 100vh;
-    background-color: #f0f0f0; /* Define a cor de fundo */
+    background-color: #f7f7f7; /* Define a cor de fundo */
 }
 
-.grid {
-    display: grid;
-    height: 600px;
-    width: 100%;
-    row-gap: 20px;
-    column-gap: 20px;
-    grid-template-columns: repeat(3, minmax(200px, 1fr));
-    grid-template-rows: repeat(2, minmax(200px, 1fr));
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    justify-items: center;
-}
+    align-content: center;
+    height: 100%;
+  }
+  
+  .responsive-div {
+    background-color: #f9f8f8;
+    margin: 20px;
+    height: 300px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 100%;
+    min-height: 300px;
+    max-height: 100%;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
 
-.grid > div {
-    position: relative;
-}
+  .chartText {
+    font-family: 'Nunito', sans-serif;
+    color: #333333;
+  }
 
-@media only screen and (max-width: 600px) {
-    .grid {
-        grid-template-columns: repeat(2, minmax(200px, 1fr));
-        grid-template-rows: repeat(5, minmax(200px, 1fr));
-        height: 800px;
-    }
-}
+  .axis path {
+    stroke-dasharray: 2 2;
+    stroke: rgba(200, 200, 200, 0.3);
+  }
+
+  .axis line {
+    stroke-dasharray: 2 2;
+    stroke: rgba(150, 150, 150, 0.6);
+  }
+  
+  .tick line {
+    stroke: rgba(150, 150, 150, 0.4);
+  }
+
+  .tick text {
+    font-family: 'Nunito', sans-serif;
+    fill: rgba(150, 150, 150, 0.6);
+  }
+
+
 
   
