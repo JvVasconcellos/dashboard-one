@@ -1,86 +1,23 @@
-import React, {useState, useMemo, useRef, useEffect} from "react";
-import { LinePath} from '@visx/shape';
+import React, {useState, useMemo} from "react";
+import { LinePath, AreaClosed} from '@visx/shape';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { Group } from '@visx/group';
-import { scaleLinear, scaleTime, scaleBand } from '@visx/scale';
+import { scaleLinear, scaleTime} from '@visx/scale';
 import {curveNatural} from '@visx/curve';
 import { localPoint } from '@visx/event';
 import { Text } from '@visx/text';
 import { bisector } from 'd3-array';
+import Tooltip from "../layout/Tooltip";
 import "../../styles/Dashboard.css"
 
 
-const Tooltip = ({ x, y, points, config }) => {
-  if (!x || !y || points.length === 0) return null;
-  const header = `${points[0].date}`;
-  const message = points.map((p) => `${p.id}: ${p.value}`);
 
-  return (
-    <g>
-      <rect
-        x={x - 70}
-        y={y - 70}
-        width={140}
-        height={20}
-        fill="#f0f0f0"
-        rx={5}
-        ry={5}
-        stroke="333"
-        strokeWidth={2}
-      />
-      <text
-        x={x - 65}
-        y={y - 60}
-        textAnchor="start"
-        dominantBaseline="central"
-        fontSize={12}
-        fontWeight="bold"
-        className="chartText"
-        fill="#333"
-      >
-        {header}
-      </text>
-      <rect
-        x={x - 70}
-        y={y - 50}
-        width={140}
-        height={40 * points.length}
-        fill="#f7f7f7"
-        rx={5}
-        ry={5}
-        stroke="333"
-        strokeWidth={2}
-      />
-      {points.map((point, index) => (
-        <g key={point.id}>
-        <circle
-          cx={x - 55}
-          cy={y - 30 + index * 40}
-          r={5}
-          fill={point.color}
-        />
-        <text
-          x={x - 40} 
-          y={y - 30 + index * 40}
-          className="chartText"
-          textAnchor="start" 
-          dominantBaseline="central"
-          fontSize={12}
-          fontWeight="bold"
-          fill="#333"
-        >
-          {message[index]}
-        </text>
-        </g>
-      ))}
-    </g>
-  );
-};
+
 
 const LinearChart = ({ datasets, width, height, config, identifier}) => {
-    const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
-    const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
-    const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
+  const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
+  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
+  const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
 
   // Defina as escalas
   const xScale = useMemo(
@@ -142,6 +79,21 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
   // Defina os elementos do gráfico
   return (
     <svg width={width} height={height} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+      <defs>
+        {datasets.map((dataset) => (
+          <linearGradient
+            key={`gradient-${dataset.id}`}
+            id={`gradient-${dataset.id}`}
+            x1="0%"
+            y1="0%"
+            x2="0%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor={dataset.color} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={dataset.color} stopOpacity="0" />
+          </linearGradient>
+        ))}
+      </defs>
       <Group>
       <rect
         x={margin.left}
@@ -151,15 +103,26 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
         fill={"#F7F7F7"}
       />
       {datasets.map((dataset) => (
-          <LinePath
-            key={dataset.id}
-            data={dataset.data}
-            x={(d) => xScale(d.date)}
-            y={(d) => yScale(d.value)}
-            stroke={dataset.color}
-            strokeWidth={2}
-            curve={curveNatural}
-          />
+          <React.Fragment key={dataset.id}>
+            <AreaClosed
+              data={dataset.data}
+              x={(d) => xScale(d.date)}
+              y={(d) => yScale(d.value)}
+              yScale={yScale}
+              strokeWidth={0}
+              fill={`url(#gradient-${dataset.id})`}
+              curve={curveNatural}
+            />
+            <LinePath
+              data={dataset.data}
+              x={(d) => xScale(d.date)}
+              y={(d) => yScale(d.value)}
+              stroke={dataset.color}
+              strokeWidth={2}
+              curve={curveNatural}
+            />
+          </React.Fragment>
+
         ))}
         <AxisLeft scale={yScale} left={margin.left} numTicks={5} hideAxisLine={true} hideZero={true} className="axisLine" tickClassName="tick"/>
         <AxisBottom scale={xScale} top={height - margin.bottom} numTicks={5} hideAxisLine={true} hideZero={true} className="axisLine" tickClassName="tick"/>
@@ -167,6 +130,7 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
           x={margin.top / 2}
           y={margin.left}
           fontSize={margin.top/ 4 }
+          fontWeight="bold"          
           textAnchor="start"
           className="chartText"
         >
