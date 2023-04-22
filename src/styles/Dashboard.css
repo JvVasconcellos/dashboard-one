@@ -1,6 +1,55 @@
 .dashboard {
-    background-color: #f0f0f0; /* Define a cor de fundo */
-    max-width: 100vw; /* Define a largura máxima do componente como a largura da tela */
-    max-height: 100vh; /* Define a altura máxima do componente como a altura da tela */
-    overflow: hidden; /* Impede que o conteúdo do componente ultrapasse a largura e altura máximas */
+    min-height: 100vh;
+    background-color: #f7f7f7; /* Define a cor de fundo */
 }
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+  }
+  
+  .responsive-div {
+    background-color: #f9f8f8;
+    margin: 20px;
+    height: 300px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 100%;
+    min-height: 300px;
+    max-height: 100%;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+
+  .chartText {
+    font-family: 'Nunito', sans-serif;
+    color: #333333;
+  }
+
+  .axis path {
+    stroke-dasharray: 2 2;
+    stroke: rgba(200, 200, 200, 0.3);
+  }
+
+  .axis line {
+    stroke-dasharray: 2 2;
+    stroke: rgba(150, 150, 150, 0.6);
+  }
+  
+  .tick line {
+    stroke: rgba(150, 150, 150, 0.4);
+  }
+
+  .tick text {
+    font-family: 'Nunito', sans-serif;
+    fill: rgba(150, 150, 150, 0.6);
+  }
+
+
+
+  
