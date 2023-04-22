@@ -1,6 +1,30 @@
 .dashboard {
+    min-height: 100vh;
     background-color: #f0f0f0; /* Define a cor de fundo */
-    max-width: 100vw; /* Define a largura máxima do componente como a largura da tela */
-    max-height: 100vh; /* Define a altura máxima do componente como a altura da tela */
-    overflow: hidden; /* Impede que o conteúdo do componente ultrapasse a largura e altura máximas */
 }
+
+.grid {
+    display: grid;
+    height: 600px;
+    width: 100%;
+    row-gap: 20px;
+    column-gap: 20px;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    grid-template-rows: repeat(2, minmax(200px, 1fr));
+    align-items: center;
+    justify-items: center;
+}
+
+.grid > div {
+    position: relative;
+}
+
+@media only screen and (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+        grid-template-rows: repeat(5, minmax(200px, 1fr));
+        height: 800px;
+    }
+}
+
+  

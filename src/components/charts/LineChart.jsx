@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo} from "react";
 import { LinePath} from '@visx/shape';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { Group } from '@visx/group';
@@ -7,6 +7,7 @@ import {curveNatural} from '@visx/curve';
 import { localPoint } from '@visx/event';
 import { Text } from '@visx/text';
 import { bisector } from 'd3-array';
+
 
 const Tooltip = ({ x, y, points, config}) => {
     if (!x || !y || points.length === 0) return null;
@@ -41,6 +42,7 @@ const Tooltip = ({ x, y, points, config}) => {
   };
 
 const LinearChart = ({ datasets, width, height, config}) => {
+  console.log(width);
     const margin = { top: height / 5, right: width / 10, bottom: height / 5, left: width / 10 };
     const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
     const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
@@ -106,6 +108,13 @@ const LinearChart = ({ datasets, width, height, config}) => {
   return (
     <svg width={width} height={height} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
       <Group>
+      <rect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill={"#FFFFFF"}
+      />
       {datasets.map((dataset) => (
           <LinePath
             key={dataset.id}
@@ -117,27 +126,27 @@ const LinearChart = ({ datasets, width, height, config}) => {
             curve={curveNatural}
           />
         ))}
-        <AxisLeft scale={yScale} left={margin.left} />
-        <AxisBottom scale={xScale} top={height - margin.bottom} />
+        <AxisLeft scale={yScale} left={margin.left} numTicks={5}/>
+        <AxisBottom scale={xScale} top={height - margin.bottom} numTicks={5} />
         <Text
-        x={margin.left / 2}
-        y={height / 2}
-        fontSize={14}
-        fontWeight="bold"
-        textAnchor="middle"
-        transform={`rotate(-90, ${margin.left / 2}, ${height / 2})`}
-      >
-        {config.valueLabel}
-      </Text>
-      <Text
-        x={width / 2}
-        y={height - margin.bottom / 2}
-        fontSize={14}
-        fontWeight="bold"
-        textAnchor="middle"
-      >
-        {config.keyLabel}
-      </Text>
+          x={margin.left / 2}
+          y={height / 2}
+          fontSize={margin.left / 4}
+          fontWeight="bold"
+          textAnchor="middle"
+          transform={`rotate(-90, ${margin.left / 2}, ${height / 2})`}
+        >
+          {config.valueLabel}
+        </Text>
+        <Text
+          x={width / 2}
+          y={height - margin.bottom / 2}
+          fontSize={margin.bottom / 4 }
+          fontWeight="bold"
+          textAnchor="middle"
+        >
+          {config.keyLabel}
+        </Text>
         <Tooltip {...tooltip} />
       </Group>
     </svg>
