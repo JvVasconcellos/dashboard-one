@@ -4,7 +4,7 @@ import { AxisLeft, AxisBottom } from "@visx/axis";
 import { Group } from "@visx/group";
 import { scaleLinear, scaleBand } from "@visx/scale";
 import { Text } from "@visx/text";
-import { extent } from "d3-array"
+import { LinearGradient } from "@visx/gradient"
 import Tooltip from "../layout/Tooltip";
 import "../../styles/Dashboard.css";
 
@@ -29,6 +29,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     return result;
   };
   const stackedData = stackData(datasets);
+  console.log(JSON.stringify([Math.max(...stackedData.map((d) => d.total)), stackedData]))
 
   // Define the scales
   const xScale = useMemo(
@@ -56,10 +57,10 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     return data[index];
   };
 
-  const handleMouseMove = (event, bar, index) => {
-    const { x, y, key, height, width } = bar;
+  const handleMouseMove = (bar) => {
+    const { x, y, key, index, width } = bar;
     const date = getDataAtIndex(index).date;
-    const value = yScale.invert(height);
+    const value = stackedData[index][key];
   
     setTooltip({
       x: x + width / 2,
@@ -103,6 +104,18 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   // Define the chart elements
   return (
     <svg width={width} height={height}>
+      <defs>
+        {datasets.map((dataset, index) => (
+          <LinearGradient
+            key={`gradient-${dataset.id}`}
+            id={`gradient-${dataset.id}`}
+            from={dataset.color}
+            to={dataset.color}
+            fromOpacity={1}
+            toOpacity={1}
+          />
+        ))}
+      </defs>
       <Group>
         <rect
           x={margin.left}
@@ -126,12 +139,12 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
                 <rect
                     key={`bar-stack-${barStack.index}-${bar.index}`}
                     x={bar.x}
-                    y={yScale(bar.height) + margin.top}
-                    height={yScale(0) - yScale(bar.height)}
+                    y={bar.y}
+                    height={bar.height}
                     width={bar.width}
-                    fill={bar.color}
                     onMouseLeave={handleMouseLeave}
-                    onMouseMove={(event) => handleMouseMove(event, bar, bar.index)}
+                    onMouseMove={(event) => handleMouseMove(bar)}
+                    fill={`url(#gradient-${bar.key})`}
                 />
               ))
             )
