@@ -101,18 +101,18 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     return dataset.color;
   };
 
+
   // Define the chart elements
   return (
     <svg width={width} height={height}>
       <defs>
-        {datasets.map((dataset, index) => (
+        {datasets.map((dataset) => (
           <LinearGradient
-            key={`gradient-${dataset.id}`}
-            id={`gradient-${dataset.id}`}
+            id={`${dataset.id}`}
             from={dataset.color}
             to={dataset.color}
             fromOpacity={1}
-            toOpacity={1}
+            toOpacity={0.7}
           />
         ))}
       </defs>
@@ -144,7 +144,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
                     width={bar.width}
                     onMouseLeave={handleMouseLeave}
                     onMouseMove={(event) => handleMouseMove(bar)}
-                    fill={`url(#gradient-${bar.key})`}
+                    fill={`url(#${bar.key})`}
                 />
               ))
             )
