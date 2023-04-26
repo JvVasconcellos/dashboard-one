@@ -11,8 +11,9 @@ import "../../styles/Dashboard.css";
 
 const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
+  
+  //Agrupamento de dados
   const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
-
   const stackData = (datasets) => {
     const result = [];
   
@@ -29,9 +30,31 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     return result;
   };
   const stackedData = stackData(datasets);
-  console.log(JSON.stringify([Math.max(...stackedData.map((d) => d.total)), stackedData]))
 
-  // Define the scales
+  //Parâmetros da StackBar
+  const keys = datasets.map((d) => d.id);
+  const data = datasets.reduce((acc, dataset) => {
+    dataset.data.forEach((datum) => {
+      const item = acc.find((item) => item.date === datum.date);
+      if (item) {
+        item[dataset.id] = datum.value;
+      } else {
+        acc.push({ date: datum.date, [dataset.id]: datum.value });
+      }
+    });
+    return acc;
+  }, []);
+
+  const color = (key) => {
+    const dataset = datasets.find((d) => d.id === key);
+    return dataset.color;
+  };
+
+  const getDataAtIndex = (index) => {
+    return data[index];
+  };
+
+  //Escalas
   const xScale = useMemo(
     () =>
       scaleBand({
@@ -41,7 +64,6 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
       }),
     [allData, margin.left, margin.right, width]
   );
-
   const yScale = useMemo(
     () =>
       scaleLinear({
@@ -51,12 +73,8 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     [stackedData, height, margin.bottom, margin.top]
   );
 
+  //Tooltip
   const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
-
-  const getDataAtIndex = (index) => {
-    return data[index];
-  };
-
   const handleMouseMove = (bar) => {
     const { x, y, key, index, width } = bar;
     const date = getDataAtIndex(index).date;
@@ -83,36 +101,17 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     setTooltip({ x: null, y: null, date: null, value: null });
   };
 
-  const keys = datasets.map((d) => d.id);
-  const data = datasets.reduce((acc, dataset) => {
-    dataset.data.forEach((datum) => {
-      const item = acc.find((item) => item.date === datum.date);
-      if (item) {
-        item[dataset.id] = datum.value;
-      } else {
-        acc.push({ date: datum.date, [dataset.id]: datum.value });
-      }
-    });
-    return acc;
-  }, []);
 
-  const color = (key, index) => {
-    const dataset = datasets.find((d) => d.id === key);
-    return dataset.color;
-  };
-
-
-  // Define the chart elements
   return (
     <svg width={width} height={height}>
       <defs>
         {datasets.map((dataset) => (
           <LinearGradient
-            id={`${dataset.id}`}
+            id={`bar-${dataset.id}`}
             from={dataset.color}
             to={dataset.color}
             fromOpacity={1}
-            toOpacity={0.7}
+            toOpacity={0.5}
           />
         ))}
       </defs>
@@ -144,7 +143,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
                     width={bar.width}
                     onMouseLeave={handleMouseLeave}
                     onMouseMove={(event) => handleMouseMove(bar)}
-                    fill={`url(#${bar.key})`}
+                    fill={`url(#bar-${bar.key})`}
                 />
               ))
             )

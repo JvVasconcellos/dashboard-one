@@ -3,6 +3,7 @@ import { LinePath, AreaClosed} from '@visx/shape';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { Group } from '@visx/group';
 import { scaleLinear, scaleTime} from '@visx/scale';
+import { LinearGradient } from "@visx/gradient"
 import {curveNatural} from '@visx/curve';
 import { localPoint } from '@visx/event';
 import { Text } from '@visx/text';
@@ -16,10 +17,11 @@ import "../../styles/Dashboard.css"
 
 const LinearChart = ({ datasets, width, height, config, identifier}) => {
   const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
-  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
+  
+  //Agrupamento de dados
   const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
 
-  // Defina as escalas
+  //Escalas
   const xScale = useMemo(
     () =>
       scaleTime({
@@ -40,7 +42,8 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
       }),
     [allData, height, margin.bottom, margin.top]
   );
-
+  //Tooltip
+  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
   const handleMouseMove = (event) => {
     const { x } = localPoint(event);
     const date = xScale.invert(x);
@@ -76,22 +79,17 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
     setTooltip({ x: null, y: null, date: null, value: null });
   };
 
-  // Defina os elementos do gráfico
   return (
     <svg width={width} height={height} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
       <defs>
         {datasets.map((dataset) => (
-          <linearGradient
-            key={`gradient-${dataset.id}`}
-            id={`gradient-${dataset.id}`}
-            x1="0%"
-            y1="0%"
-            x2="0%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor={dataset.color} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={dataset.color} stopOpacity="0" />
-          </linearGradient>
+          <LinearGradient
+            id={`line-${dataset.id}`}
+            from={dataset.color}
+            to={dataset.color}
+            fromOpacity={0.3}
+            toOpacity={0}
+          />
         ))}
       </defs>
       <Group>
@@ -110,7 +108,7 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
               y={(d) => yScale(d.value)}
               yScale={yScale}
               strokeWidth={0}
-              fill={`url(#gradient-${dataset.id})`}
+              fill={`url(#line-${dataset.id})`}
               curve={curveNatural}
             />
             <LinePath
