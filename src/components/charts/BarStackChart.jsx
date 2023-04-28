@@ -4,10 +4,10 @@ import { AxisLeft, AxisBottom } from "@visx/axis";
 import { Group } from "@visx/group";
 import { scaleLinear, scaleBand } from "@visx/scale";
 import { Text } from "@visx/text";
-import { LinearGradient } from "@visx/gradient"
-import Tooltip from "../layout/Tooltip";
+import { LinearGradient } from "@visx/gradient";
+import { localPoint } from "@visx/event";
+import Tooltip from "../layout/Tooltip.jsx";
 import "../../styles/Dashboard.css";
-
 
 const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
@@ -79,9 +79,10 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     const { x, y, key, index, width } = bar;
     const date = getDataAtIndex(index).date;
     const value = stackedData[index][key];
+    const eventCoord = localPoint(event)
     setTooltip({
       x: x + width / 2,
-      y: y,
+      y: eventCoord?.y,
       points: [
         {
           id: key,
