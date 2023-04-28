@@ -2458,7 +2458,7 @@
     "@visx/point" "3.0.1"
     prop-types "^15.5.10"
 
-"@visx/event@3.0.1":
+"@visx/event@3.0.1", "@visx/event@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@visx/event/-/event-3.0.1.tgz#d5358f52ff5ef30036d955bd2b68b96472ff2d6f"
   integrity sha512-tK1EUYQLLStBuoCMbm8LJ3VbDyCVI8HjT0pMRQxm+C75FSIVWvrThgrfrC9sWOFnEMEYWspZO7hI5zjsPKjLQA==

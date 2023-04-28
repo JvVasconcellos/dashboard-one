@@ -6,7 +6,7 @@ import { scaleLinear, scaleBand } from "@visx/scale";
 import { Text } from "@visx/text";
 import { LinearGradient } from "@visx/gradient";
 import { localPoint } from "@visx/event";
-import Tooltip from "../layout/Tooltip.jsx";
+import Tooltip from "../layout/Tooltip";
 import "../../styles/Dashboard.css";
 
 const BarStackChart = ({ datasets, width, height, config, identifier }) => {
@@ -168,8 +168,8 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
           tickClassName="tick"
         />
         <Text
-          x={margin.top / 2}
-          y={margin.left}
+          x={margin.left}
+          y={margin.top / 2}
           fontSize={margin.top / 4}
           textAnchor="start"
           className="chartText"

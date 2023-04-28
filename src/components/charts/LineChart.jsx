@@ -125,8 +125,8 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
         <AxisLeft scale={yScale} left={margin.left} numTicks={5} hideAxisLine={true} hideZero={true} className="axisLine" tickClassName="tick"/>
         <AxisBottom scale={xScale} top={height - margin.bottom} numTicks={5} hideAxisLine={true} hideZero={true} className="axisLine" tickClassName="tick"/>
         <Text
-          x={margin.top / 2}
-          y={margin.left}
+          x={margin.left}
+          y={margin.top / 2}
           fontSize={margin.top/ 4 }
           fontWeight="bold"          
           textAnchor="start"
