@@ -75,11 +75,10 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
 
   //Tooltip
   const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
-  const handleMouseMove = (bar) => {
+  const handleMouseMove = (event, bar) => {
     const { x, y, key, index, width } = bar;
     const date = getDataAtIndex(index).date;
     const value = stackedData[index][key];
-  
     setTooltip({
       x: x + width / 2,
       y: y,
@@ -142,7 +141,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
                     height={bar.height}
                     width={bar.width}
                     onMouseLeave={handleMouseLeave}
-                    onMouseMove={(event) => handleMouseMove(bar)}
+                    onMouseMove={(event) => handleMouseMove(event, bar)}
                     fill={`url(#bar-${bar.key})`}
                 />
               ))
