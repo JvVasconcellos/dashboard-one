@@ -13,9 +13,9 @@ const Tooltip = ({ x, y, points, config }) => {
           y={y - 70}
           width={140}
           height={20}
-          fill="#f0f0f0"
-          rx={5}
-          ry={5}
+          fill="rgba(240, 240, 240, 0.9)"
+          rx={0}
+          ry={0}
           stroke="333"
           strokeWidth={2}
         />
@@ -35,10 +35,10 @@ const Tooltip = ({ x, y, points, config }) => {
           x={x - 70}
           y={y - 50}
           width={140}
-          height={40 * points.length}
-          fill="#f7f7f7"
-          rx={5}
-          ry={5}
+          height={20 * points.length}
+          fill="rgba(247, 247, 247, 0.9)" 
+          rx={0}
+          ry={0}
           stroke="333"
           strokeWidth={2}
         />
@@ -46,13 +46,13 @@ const Tooltip = ({ x, y, points, config }) => {
           <g key={point.id}>
           <circle
             cx={x - 55}
-            cy={y - 30 + index * 40}
+            cy={y - 40 + index * 20}
             r={5}
             fill={point.color}
           />
           <text
             x={x - 40} 
-            y={y - 30 + index * 40}
+            y={y - 40 + index * 20}
             className="chartText"
             textAnchor="start" 
             dominantBaseline="central"
