@@ -2440,7 +2440,7 @@
     "@types/react" "*"
     prop-types "^15.5.10"
 
-"@visx/curve@3.0.0":
+"@visx/curve@3.0.0", "@visx/curve@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@visx/curve/-/curve-3.0.0.tgz#c54568472e00a38483c58cf52e4a6ddb2887c2d4"
   integrity sha512-kvHJDLBeczTQ87ZExSTfRxej06l6o6UiQ0NHf9+xpAin06y6Qk1ThOHHWJTGM6KGzwlu7jEauJGHwZs6nMhDvA==
@@ -2611,7 +2611,7 @@
     classnames "^2.3.1"
     prop-types "^15.6.2"
 
-"@visx/responsive@3.0.0":
+"@visx/responsive@3.0.0", "@visx/responsive@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@visx/responsive/-/responsive-3.0.0.tgz#e183c54ce04cffe756378872d30ac88c66a137ac"
   integrity sha512-immnxQwOWlrxbnlCIqJWuDpPfrM6tglgMTN1WsyXyGluLMJqhuuxqxllfXaRPkQFS4fcvs66KCEELdazh96U2w==
@@ -4052,7 +4052,7 @@ d3-array@2, d3-array@^2.6.0:
   dependencies:
     internmap "^1.0.0"
 
-"d3-array@2 - 3", "d3-array@2.10.0 - 3":
+"d3-array@2 - 3", "d3-array@2.10.0 - 3", d3-array@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.2.3.tgz#39f1f4954e4a09ff69ac597c2d61906b04e84740"
   integrity sha512-JRHwbQQ84XuAESWhvIPaUV4/1UYTBOLiOPGWqgFDHZS1D5QN9c57FbH3QpEnQMYiOXNzKUQyGTZf+EVO7RT5TQ==

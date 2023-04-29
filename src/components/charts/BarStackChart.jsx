@@ -9,14 +9,18 @@ import { localPoint } from "@visx/event";
 import Tooltip from "../layout/Tooltip";
 import "../../styles/Dashboard.css";
 
-const BarStackChart = ({ datasets, width, height, config, identifier }) => {
-  const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
-  
-  //Agrupamento de dados
+const BarStackChart = ({
+  datasets, width, height, config, identifier,
+}) => {
+  const margin = {
+    top: height / 5, right: width / 10, bottom: height / 10, left: width / 10,
+  };
+
+  // Agrupamento de dados
   const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
-  const stackData = (datasets) => {
+  const stackData = () => {
     const result = [];
-  
+
     datasets.forEach((dataset) => {
       dataset.data.forEach((d, index) => {
         if (!result[index]) {
@@ -26,16 +30,16 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
         result[index].total += d.value;
       });
     });
-  
+
     return result;
   };
-  const stackedData = stackData(datasets);
+  const stackedData = stackData();
 
-  //Parâmetros da StackBar
+  // Parâmetros da StackBar
   const keys = datasets.map((d) => d.id);
   const data = datasets.reduce((acc, dataset) => {
     dataset.data.forEach((datum) => {
-      const item = acc.find((item) => item.key === datum.key);
+      const item = acc.find((i) => i.key === datum.key);
       if (item) {
         item[dataset.id] = datum.value;
       } else {
@@ -50,46 +54,47 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
     return dataset.color;
   };
 
-  const getDataAtIndex = (index) => {
-    return data[index];
-  };
+  const getDataAtIndex = (index) => data[index];
 
-  //Escalas
+  // Escalas
   const xScale = useMemo(
-    () =>
-      scaleBand({
-        domain: allData.map((d) => d.key),
-        range: [margin.left, width - margin.right],
-        padding: 0.2,
-      }),
-    [allData, margin.left, margin.right, width]
+    () => scaleBand({
+      domain: allData.map((d) => d.key),
+      range: [margin.left, width - margin.right],
+      padding: 0.2,
+    }),
+    [allData, margin.left, margin.right, width],
   );
   const yScale = useMemo(
-    () =>
-      scaleLinear({
-        domain: [0, Math.max(...stackedData.map((d) => d.total))],
-        range: [height - margin.bottom, margin.top],
-      }),
-    [stackedData, height, margin.bottom, margin.top]
+    () => scaleLinear({
+      domain: [0, Math.max(...stackedData.map((d) => d.total))],
+      range: [height - margin.bottom, margin.top],
+    }),
+    [stackedData, height, margin.bottom, margin.top],
   );
 
-  //Tooltip
-  const [tooltip, setTooltip] = useState({ x: null, y: null, key: null, value: null, config: null });
+  // Tooltip
+  const [tooltip, setTooltip] = useState({
+    x: null, y: null, key: null, value: null, config: null,
+  });
   const handleMouseMove = (event, bar) => {
-    const { x, y, key, index, width } = bar;
+    const {
+      x, y, key, index,
+    } = bar;
+    const barWidth = bar.width;
     const keyValue = getDataAtIndex(index).key;
     const value = stackedData[index][key];
-    const eventCoord = localPoint(event)
+    const eventCoord = localPoint(event);
     setTooltip({
-      x: x + width / 2,
+      x: x + barWidth / 2,
       y: eventCoord?.y,
       points: [
         {
           id: key,
           key: keyValue,
           value: value.toFixed(2),
-          x: x,
-          y: y,
+          x,
+          y,
           color: bar.color,
         },
       ],
@@ -98,9 +103,10 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   };
 
   const handleMouseLeave = () => {
-    setTooltip({ x: null, y: null, key: null, value: null });
+    setTooltip({
+      x: null, y: null, key: null, value: null,
+    });
   };
-
 
   return (
     <svg width={width} height={height}>
@@ -121,7 +127,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
           y={margin.top}
           width={width - margin.left - margin.right}
           height={height - margin.top - margin.bottom}
-          fill={"#F7F7F7"}
+          fill="#F7F7F7"
         />
         <BarStack
           data={data}
@@ -132,29 +138,25 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
           color={color}
           getDataAtIndex={getDataAtIndex}
         >
-          {(barStacks ) =>
-            barStacks.map((barStack) =>
-              barStack.bars.map((bar) => (
-                <rect
-                    key={`bar-stack-${barStack.index}-${bar.index}`}
-                    x={bar.x}
-                    y={bar.y}
-                    height={bar.height}
-                    width={bar.width}
-                    onMouseLeave={handleMouseLeave}
-                    onMouseMove={(event) => handleMouseMove(event, bar)}
-                    fill={`url(#bar-${bar.key})`}
-                />
-              ))
-            )
-          }
+          {(barStacks) => barStacks.map((barStack) => barStack.bars.map((bar) => (
+            <rect
+              key={`bar-stack-${barStack.index}-${bar.index}`}
+              x={bar.x}
+              y={bar.y}
+              height={bar.height}
+              width={bar.width}
+              onMouseLeave={handleMouseLeave}
+              onMouseMove={(event) => handleMouseMove(event, bar)}
+              fill={`url(#bar-${bar.key})`}
+            />
+          )))}
         </BarStack>
         <AxisLeft
           scale={yScale}
           left={margin.left}
           numTicks={5}
-          hideAxisLine={true}
-          hideZero={true}
+          hideAxisLine
+          hideZero
           className="axisLine"
           tickClassName="tick"
         />
@@ -162,8 +164,8 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
           scale={xScale}
           top={height - margin.bottom}
           numTicks={5}
-          hideAxisLine={true}
-          hideZero={true}
+          hideAxisLine
+          hideZero
           className="axisLine"
           tickClassName="tick"
         />
