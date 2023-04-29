@@ -1,22 +1,20 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import { Pie } from "@visx/shape";
 import { scaleOrdinal } from "@visx/scale";
-import { localPoint } from "@visx/event";
-import Tooltip from "../layout/Tooltip.jsx";
+import SliceInfo from "../layout/SliceInfo";
 import "../../styles/Dashboard.css";
 
-const PieChart = ({ datasets, width, height, config, identifier }) => {
-  const margin = { top: height / 5, right: width / 10, bottom: height / 10, left: width / 10 };
+const PieChart = ({
+  datasets, width, height, identifier,
+}) => {
+  const margin = {
+    top: height / 5, right: width / 10, bottom: height / 10, left: width / 10,
+  };
 
   const allData = datasets.reduce((acc, dataset) => acc.concat(dataset.data), []);
   const totalValue = allData.reduce((acc, data) => acc + data.value, 0);
-
-  const color = (key) => {
-    const dataset = datasets.find((d) => d.id === key);
-    return dataset.color;
-  };
 
   const colorScale = scaleOrdinal({
     domain: datasets.map((d) => d.id),
@@ -28,32 +26,22 @@ const PieChart = ({ datasets, width, height, config, identifier }) => {
     return { key: dataset.id, value: sum, percentage: (sum / totalValue) * 100 };
   });
 
-  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
+  const [activeSlice, setActiveSlice] = useState(null);
 
-  const handleMouseMove = (event, pieSlice) => {
-    const eventCoord = localPoint(event);
-    setTooltip({
-      x: eventCoord?.x,
-      y: eventCoord?.y,
-      points: [
-        {
-          id: pieSlice.data.key,
-          value: pieSlice.data.value.toFixed(2),
-          percentage: pieSlice.data.percentage.toFixed(2),
-          color: pieSlice.color,
-        },
-      ],
-      config,
-    });
+  const handleMouseMove = (pieSlice) => {
+    setActiveSlice(pieSlice.data);
   };
 
   const handleMouseLeave = () => {
-    setTooltip({ x: null, y: null, date: null, value: null });
+    setActiveSlice(null);
   };
 
   const centerX = width / 2;
   const centerY = height / 2;
-  const radius = Math.min(width, height) / 2 - Math.max(margin.top, margin.right, margin.bottom, margin.left);
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const radius = Math.min(innerWidth, innerHeight) / 2;
+  const thickness = radius / 3;
 
   return (
     <svg width={width} height={height}>
@@ -62,17 +50,18 @@ const PieChart = ({ datasets, width, height, config, identifier }) => {
           data={pieData}
           pieValue={(d) => d.value}
           outerRadius={radius}
+          innerRadius={radius - thickness}
           cornerRadius={3}
           padAngle={0.005}
         >
           {(pie) => (
             <>
-              {pie.arcs.map((arc, index) => (
-                <g key={`pie-slice-${index}`}>
+              {pie.arcs.map((arc) => (
+                <g key={`pie-slice-${arc.data.key}`}>
                   <path
                     d={pie.path(arc)}
                     fill={colorScale(arc.data.key)}
-                    onMouseMove={(event) => handleMouseMove(event, { data: arc.data, color: colorScale(arc.data.key) })}
+                    onMouseMove={() => handleMouseMove({ data: arc.data, color: colorScale(arc.data.key) })}
                     onMouseLeave={handleMouseLeave}
                   />
                 </g>
@@ -80,19 +69,23 @@ const PieChart = ({ datasets, width, height, config, identifier }) => {
             </>
           )}
         </Pie>
-        <Text
-            x={0}
-            y={0}
-            fontSize={margin.top / 4}
-            textAnchor="middle"
-            className="chartText"
-        >
-            {identifier}
-        </Text>
-        <Tooltip {...tooltip} />
-        </Group>
+
+        {activeSlice && (
+          <SliceInfo activeSlice={activeSlice} radius={radius} centerX={centerX} centerY={centerY} />
+        )}
+      </Group>
+      <Text
+        x={margin.left}
+        y={margin.top / 2}
+        fontSize={margin.top / 4}
+        fontWeight="bold"
+        textAnchor="start"
+        className="chartText"
+      >
+        {identifier}
+      </Text>
     </svg>
-    );
+  );
 };
 
 export default PieChart;

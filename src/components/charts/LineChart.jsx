@@ -26,8 +26,8 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
     () =>
       scaleTime({
         domain: [
-          Math.min(...allData.map((d) => d.date)),
-          Math.max(...allData.map((d) => d.date)),
+          Math.min(...allData.map((d) => d.key)),
+          Math.max(...allData.map((d) => d.key)),
         ],
         range: [margin.left, width - margin.right],
       }),
@@ -43,15 +43,15 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
     [allData, height, margin.bottom, margin.top]
   );
   //Tooltip
-  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
+  const [tooltip, setTooltip] = useState({ x: null, y: null, key: null, value: null, config: null });
   const handleMouseMove = (event) => {
     const { x } = localPoint(event);
-    const date = xScale.invert(x);
+    const key = xScale.invert(x);
   
-    const bisectDate = bisector((d) => d.date).left;
+    const bisectDate = bisector((d) => d.key).left;
   
     const points = datasets.map((dataset) => {
-      const index = bisectDate(dataset.data, date, 1);
+      const index = bisectDate(dataset.data, key, 1);
       const d0 = dataset.data[index - 1];
       const d1 = dataset.data[index];
   
@@ -59,13 +59,13 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
         return null;
       }
   
-      const d = date - d0.date > d1.date - date ? d1 : d0;
+      const d = key - d0.key > d1.key - key ? d1 : d0;
   
       return {
         id: dataset.id,
-        date: d.date.toISOString().split('T')[0],
+        key: d.key.toISOString().split('T')[0],
         value: d.value,
-        x: xScale(d.date),
+        x: xScale(d.key),
         y: yScale(d.value),
         color: dataset.color,
       };
@@ -76,7 +76,7 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
   
 
   const handleMouseLeave = () => {
-    setTooltip({ x: null, y: null, date: null, value: null });
+    setTooltip({ x: null, y: null, key: null, value: null });
   };
 
   return (
@@ -104,7 +104,7 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
           <React.Fragment key={dataset.id}>
             <AreaClosed
               data={dataset.data}
-              x={(d) => xScale(d.date)}
+              x={(d) => xScale(d.key)}
               y={(d) => yScale(d.value)}
               yScale={yScale}
               strokeWidth={0}
@@ -113,7 +113,7 @@ const LinearChart = ({ datasets, width, height, config, identifier}) => {
             />
             <LinePath
               data={dataset.data}
-              x={(d) => xScale(d.date)}
+              x={(d) => xScale(d.key)}
               y={(d) => yScale(d.value)}
               stroke={dataset.color}
               strokeWidth={2}

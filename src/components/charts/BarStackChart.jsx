@@ -35,11 +35,11 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   const keys = datasets.map((d) => d.id);
   const data = datasets.reduce((acc, dataset) => {
     dataset.data.forEach((datum) => {
-      const item = acc.find((item) => item.date === datum.date);
+      const item = acc.find((item) => item.key === datum.key);
       if (item) {
         item[dataset.id] = datum.value;
       } else {
-        acc.push({ date: datum.date, [dataset.id]: datum.value });
+        acc.push({ key: datum.key, [dataset.id]: datum.value });
       }
     });
     return acc;
@@ -58,7 +58,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   const xScale = useMemo(
     () =>
       scaleBand({
-        domain: allData.map((d) => d.date),
+        domain: allData.map((d) => d.key),
         range: [margin.left, width - margin.right],
         padding: 0.2,
       }),
@@ -74,10 +74,10 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   );
 
   //Tooltip
-  const [tooltip, setTooltip] = useState({ x: null, y: null, date: null, value: null, config: null });
+  const [tooltip, setTooltip] = useState({ x: null, y: null, key: null, value: null, config: null });
   const handleMouseMove = (event, bar) => {
     const { x, y, key, index, width } = bar;
-    const date = getDataAtIndex(index).date;
+    const keyValue = getDataAtIndex(index).key;
     const value = stackedData[index][key];
     const eventCoord = localPoint(event)
     setTooltip({
@@ -86,7 +86,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
       points: [
         {
           id: key,
-          date: date,
+          key: keyValue,
           value: value.toFixed(2),
           x: x,
           y: y,
@@ -98,7 +98,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
   };
 
   const handleMouseLeave = () => {
-    setTooltip({ x: null, y: null, date: null, value: null });
+    setTooltip({ x: null, y: null, key: null, value: null });
   };
 
 
@@ -126,7 +126,7 @@ const BarStackChart = ({ datasets, width, height, config, identifier }) => {
         <BarStack
           data={data}
           keys={keys}
-          x={(d) => d.date}
+          x={(d) => d.key}
           xScale={xScale}
           yScale={yScale}
           color={color}
