@@ -17,6 +17,10 @@
         "react"
     ],
     "rules": {
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "react/function-component-definition": "off",
+        "react/prop-types": "off",
+        "max-len": ["error", 150],
+        "react/jsx-props-no-spreading": "off"
     }
 }

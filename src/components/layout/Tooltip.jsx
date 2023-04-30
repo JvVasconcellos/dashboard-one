@@ -3,7 +3,7 @@ import React from "react";
 //Tooltip
 const Tooltip = ({ x, y, points, config }) => {
     if (!x || !y || points.length === 0) return null;
-    const header = `${points[0].date}`;
+    const header = `${points[0].key}`;
     const message = points.map((p) => `${p.id}: ${p.value}`);
   
     return (
