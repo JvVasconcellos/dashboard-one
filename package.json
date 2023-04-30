@@ -21,8 +21,10 @@
     "@visx/visx": "^3.1.2",
     "d3-array": "^3.2.3",
     "loader-utils": "3.2.1",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.7.1"
