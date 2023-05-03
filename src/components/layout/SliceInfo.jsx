@@ -9,9 +9,7 @@ const SliceInfo = ({
 
   const fontSize = radius / 10;
 
-  const sliceDataStr = (value, percentage) => {
-    return value.toFixed(2) + " - " + percentage.toFixed(2) + "%";
-  }
+  const sliceDataStr = (value, percentage) => `${value.toFixed(2)} - ${percentage.toFixed(2)}%`;
 
   return (
     <Group>
