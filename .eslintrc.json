@@ -21,6 +21,7 @@
         "react/function-component-definition": "off",
         "react/prop-types": "off",
         "max-len": ["error", 150],
-        "react/jsx-props-no-spreading": "off"
+        "react/jsx-props-no-spreading": "off",
+        "prefer-template": "off"
     }
 }

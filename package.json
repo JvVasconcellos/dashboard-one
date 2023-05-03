@@ -1,10 +1,8 @@
 {
-  "name": "react",
+  "name": "dashboard",
   "version": "1.0.0",
-  "description": "React example starter project",
+  "description": "Dashboard ONE",
   "keywords": [
-    "react",
-    "starter"
   ],
   "main": "src/index.js",
   "dependencies": {
@@ -27,11 +25,13 @@
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
-    "react-spring": "^9.7.1"
+    "react-spring": "^9.7.1",
+    "workbox-webpack-plugin": "^6.5.4"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
     "@typescript-eslint/parser": "^5.59.1",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",
@@ -48,6 +48,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:dev": "env-cmd -f ./.env.development yarn build",
+    "build:hom": "env-cmd -f ./.env.homologation yarn build",
+    "build:prod": "env-cmd -f ./.env.production yarn build",
+    "build:devsydle": "env-cmd -f ./.env.development.sydle yarn build",
+    "build:homsydle": "env-cmd -f ./.env.homologation.sydle yarn build",
+    "build:prodsydle": "env-cmd -f ./.env.production.sydle yarn build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
